@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DevBak</title>
+	<script type="text/javascript" src="extframeworks/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="controllers/ui.js"></script>
+</head>
+<body>
+<label for="user.name">User:</label>
+<input type="text" id="user.name" />
+<label for="user.password">Passwrd:</label>
+<input type="password" id="user.password" />
+<p></p>
+<input type="checkbox" id="options.need_en_password" />
+<label for="options.need_en_password">Need EN password</label>
+<label for="user.en_password">En Password:</label>
+<input type="password" id="user.en_password" />
+<p></p>
+<input type="radio" name="options.device_type" id="options.device_huawei" value="huawei" />
+<label for="options.device_huawei">Huawei Device</label>
+<input type="radio" name="options.device_type" id="options.device_cisco" value="cisco" />
+<label for="options.device_cisco">Cisco-like Device</label>
+<p></p>
+<select id="data.ip_list" multiple="multiple">
+	<option>aaa</option>
+</select>
+<p></p>
+<input type="text" id="data.ip_address" />
+<button id="ui.addToListButton">Add</button>
+<button id="ui.importListData">Import...</button>
+<button id="ui.deleteSelected">Delete</button>
+<button id="ui.clearList">Clear</button>
+<p></p>
+<textarea></textarea>
+<p></p>
+<button id="ui.startBackup">Start</button>
+<button id="ui.breakBackup">Break</button>
+</body>
+</html>
