@@ -1,6 +1,5 @@
 "use strict";
 
-const telnet = require("telnet-client");
 const ipAddressPattern = /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/;
 
 $(function(){
@@ -17,57 +16,35 @@ $(function(){
 		return true;
 	}
 
-	function newConnection(param) {
-		let client = new telnet();
-
-		client.on("ready" , (function(){
-			let caller = param;
-			return function(prompt){
-				console.log("connection " + caller.name + " ready.");
-				caller.onready();
-			}
-		})());
-
-		client.on("timeout" , (function(){
-			let caller = param;
-			return function(){
-				console.log("connection " + caller.name + " timeout.");
-				caller.ontimeout();
-			}
-		})());
-
-		client.on("close" , (function(){
-			let caller = param;
-			return function(){
-				console.log("connection " + caller.name + " closed.");
-				caller.onclose();
-			}
-		})());
-
-		return client;
-	}
-
-	function startBackupTasks() {
-		let client = newConnection({
-			name : "localhost" , 
-			onready : function(prompt) {
-				;
-			} , 
-			ontimeout : function() {
-				;
-			} , 
-			onclose : function() {
-				;
-			}
-		});
-
-		client.connect({
-			host : "127.0.0.1" , 
-			port : 3000 ,
+	function autoAction() {
+		let connection_common = {
+			username : "" , 
+			password : "" , 
 			shellPrompt: "/ #" , 
 			timeout : 1500
-			// removeEcho : 4
+		};
+
+		let connection_info = {
+			host : "127.0.0.1" , 
+			port : 3000
+		};
+
+		let task_callback = function() {
+			;
+		}
+
+		let user_script = [];
+
+		// using user script to initial factory
+		let factory = new Factory({
+			script : user_script , 
+			options : connection_common , 
+			callback: task_callback
 		});
+
+		let auto_action = factory.create(connection_info);
+
+		auto_action.start();
 	}
 
 	$("#ui\\.addToListButton").bind("click" , function(){
@@ -88,7 +65,7 @@ $(function(){
 
 	$("#ui\\.startBackup").bind("click" , function(){
 		if (validate()) {
-			startBackupTasks();
+			autoAction();
 		};
 	})
 
