@@ -1,39 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<title>DevBak</title>
+
+	<link rel="stylesheet" href="extframeworks/bootstrap-3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="extframeworks/flatui/css/flat-ui.min.css">
+
 	<script type="text/javascript" src="extframeworks/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="extframeworks/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="extframeworks/flatui/js/flat-ui.min.js"></script>
+
 	<script type="text/javascript" src="controllers/ui.js"></script>
 </head>
-<body>
-<label for="user.name">User:</label>
-<input type="text" id="user.name" />
-<label for="user.password">Passwrd:</label>
-<input type="password" id="user.password" />
-<p></p>
-<input type="checkbox" id="options.need_en_password" />
-<label for="options.need_en_password">Need EN password</label>
-<label for="user.en_password">En Password:</label>
-<input type="password" id="user.en_password" />
-<p></p>
-<input type="radio" name="options.device_type" id="options.device_huawei" value="huawei" />
-<label for="options.device_huawei">Huawei Device</label>
-<input type="radio" name="options.device_type" id="options.device_cisco" value="cisco" />
-<label for="options.device_cisco">Cisco-like Device</label>
-<p></p>
-<select id="data.ip_list" multiple="multiple">
-	<option>aaa</option>
-</select>
-<p></p>
-<input type="text" id="data.ip_address" />
-<button id="ui.addToListButton">Add</button>
-<button id="ui.importListData">Import...</button>
-<button id="ui.deleteSelected">Delete</button>
-<button id="ui.clearList">Clear</button>
-<p></p>
-<textarea></textarea>
-<p></p>
-<button id="ui.startBackup">Start</button>
-<button id="ui.breakBackup">Break</button>
-</body>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-6">
+					<label for="user.name">User:</label>
+					<input type="text" id="user.name" class="form-control" />
+				</div>
+				<div class="col-xs-6">
+					<label for="user.password">Passwrd:</label>
+					<input type="password" id="user.password" class="form-control" />
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-6">
+					<label class="checkbox" for="options.need_en_password">
+					<input type="checkbox" id="options.need_en_password" />
+						need EN password
+					</label>
+				</div>
+				<div class="col-xs-6">
+					<label for="user.en_password">En Password:</label>
+					<input type="password" id="user.en_password" class="form-control" />
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-12">
+					<input type="radio" name="options.device_type" id="options.device_huawei" value="huawei" />
+					<label for="options.device_huawei">Huawei Device</label>
+					<br />
+					<input type="radio" name="options.device_type" id="options.device_cisco" value="cisco" />
+					<label for="options.device_cisco">Cisco-like Device</label>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-12">
+					<select multiple="multiple">
+						<option>aaa</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-5">
+					<input type="text" id="data.ip_address" class="form-control" />
+				</div>
+				<div class="col-xs-7">
+					<button id="ui.addToListButton" class="btn btn-lg btn-primary">
+						Add
+					</button>
+					<button id="ui.importListData" class="btn btn-lg btn-primary">
+						Import...
+					</button>
+					<button id="ui.deleteSelected" class="btn btn-lg btn-danger">
+						Delete
+					</button>
+					<button id="ui.clearList" class="btn btn-lg btn-danger">
+						Clear
+					</button>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<textarea></textarea>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-6">
+					<button id="ui.startBackup" class="btn btn-block btn-lg btn-success">
+						Start
+					</button>
+				</div>
+				<div class="col-xs-6">
+					<button id="ui.breakBackup" class="btn btn-block btn-lg btn-danger">
+						Break
+					</button>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
