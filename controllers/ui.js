@@ -5,8 +5,16 @@ const ipAddressPattern = /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1
 $(function(){
 	let $user_name = $("#user\\.name");
 	let $user_password = $("#user\\.password");
-	let $need_enpassword = $("#options\\.need_en_password");
-	let $en_password = $("#user\\.en_password");
+	let $super_password = $("#user\\.super_password");
+	let $user_scripts = $("#ui\\.script_list");
+	let $user_tags = $("#ui\\.user_tags");
+
+	// wait app load from DevBak.scripts
+	let $$script_list = null;
+	let $$import_data = null;
+
+	// enable select components
+	$("select").select2({dropdownCssClass: 'dropdown-inverse'});
 
 	/**
 	* validate all of user inputs
@@ -17,6 +25,11 @@ $(function(){
 	}
 
 	function autoAction() {
+		let username = $user_name.val();
+		let password = $user_password.val();
+		let super_password = $super_password.val();
+		let 
+
 		let connection_common = {
 			username : "" , 
 			password : "" , 

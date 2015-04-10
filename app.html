@@ -9,10 +9,12 @@
 
 	<link rel="stylesheet" href="extframeworks/bootstrap-3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" href="extframeworks/flatui/css/flat-ui.min.css">
+	<link rel="stylesheet" href="extframeworks/sweet-alert/sweet-alert.css">
 
 	<script type="text/javascript" src="extframeworks/jquery-1.11.2.min.js"></script>
 	<script type="text/javascript" src="extframeworks/bootstrap-3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="extframeworks/flatui/js/flat-ui.min.js"></script>
+	<script type="text/javascript" src="extframeworks/sweet-alert/sweet-alert.min.js"></script>
 
 	<script type="text/javascript" src="controllers/factory.js"></script>
 	<script type="text/javascript" src="controllers/ui.js"></script>
@@ -32,61 +34,47 @@
 			
 			<div class="row">
 				<div class="col-xs-6">
-					<label class="checkbox" for="options.need_en_password">
-					<input type="checkbox" id="options.need_en_password" />
-						need EN password
-					</label>
-				</div>
-				<div class="col-xs-6">
-					<label for="user.en_password">En Password:</label>
-					<input type="password" id="user.en_password" class="form-control" />
-				</div>
-			</div>
-			
-			<div class="row">
-				<div class="col-xs-12">
-					<input type="radio" name="options.device_type" id="options.device_huawei" value="huawei" />
-					<label for="options.device_huawei">Huawei Device</label>
+					<label for="ui.script_list">Script list</label>
 					<br />
-					<input type="radio" name="options.device_type" id="options.device_cisco" value="cisco" />
-					<label for="options.device_cisco">Cisco-like Device</label>
-				</div>
-			</div>
-			
-			<div class="row">
-				<div class="col-xs-12">
-					<select multiple="multiple">
-						<option>aaa</option>
+					<select id="ui.script_list" class="form-control select select-primary select-block mbl">
+						<!--
+						<option value="0">My Profile</option>
+						<option value="1">My Friends</option>
+						-->
 					</select>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-xs-5">
-					<input type="text" id="data.ip_address" class="form-control" />
-				</div>
-				<div class="col-xs-7">
-					<button id="ui.addToListButton" class="btn btn-lg btn-primary">
-						Add
-					</button>
 					<button id="ui.importListData" class="btn btn-lg btn-primary">
 						Import...
 					</button>
-					<button id="ui.deleteSelected" class="btn btn-lg btn-danger">
-						Delete
-					</button>
+				</div>
+				<div class="col-xs-6">
+					<label for="user.en_password">Super Password:</label>
+					<div class="form-group">
+						<div class="input-group">
+						<div class="input-group-addon">
+							*
+						</div>
+						<input type="password" class="form-control" id="user.super_password" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-10">
+					<input name="ui.user_tags" class="tagsinput" data-role="tagsinput" value="" />
+				</div>
+				<div class="col-xs-2">
 					<button id="ui.clearList" class="btn btn-lg btn-danger">
 						Clear
 					</button>
-				</div>
+				</button>
 			</div>
 
 			<div class="row">
 				<div class="col-xs-12">
-					<textarea></textarea>
+					<p></p>
 				</div>
 			</div>
-			
+
 			<div class="row">
 				<div class="col-xs-6">
 					<button id="ui.startBackup" class="btn btn-block btn-lg btn-success">
@@ -97,6 +85,14 @@
 					<button id="ui.breakBackup" class="btn btn-block btn-lg btn-danger">
 						Break
 					</button>
+				</div>
+			</div>
+
+			<p></p>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<textarea class="form-control" style="height:180px"></textarea>
 				</div>
 			</div>
 		</div>
