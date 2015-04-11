@@ -8,6 +8,7 @@ $(function(){
 	let $super_password = $("#user\\.super_password");
 	let $user_scripts = $("#ui\\.script_list");
 	let $user_tags = $("#ui\\.user_tags");
+	let $file_picker = $("#com\\.picker");
 
 	// wait app load from DevBak.scripts
 	let $$script_list = null;
@@ -15,6 +16,38 @@ $(function(){
 
 	// enable select components
 	$("select").select2({dropdownCssClass: 'dropdown-inverse'});
+
+	let frage = document.createDocumentFragment();
+	let option_template = document.createElement("option");
+	let option = option_template.cloneNode();
+	for (let s in UserScript) {
+		option = option_template.cloneNode();
+		option.setAttribute("value" , s);
+		option.appendChild(document.createTextNode(s));
+		frage.appendChild(option);
+	}
+	option.setAttribute("selected" , "selected");
+	$user_scripts.append(frage);
+
+	// bind data import event
+	$file_picker.change(function(evt){
+		let files = evt.target.files;
+		if (files.length) {
+			let file = files[0];
+			let reader = new FileReader();
+
+			reader.onloaded = function(event) {
+				let workbook = XLSX.read(event.target.result , { type : "binary" });
+				let worksheet = workbook.Sheets[workbook.SheetNames[0]];
+				for(let z in worksheet) {
+					console.log(z)
+				}
+
+			};
+
+			reader.readAsBinaryString(file);
+		};
+	});
 
 	/**
 	* validate all of user inputs
@@ -28,7 +61,7 @@ $(function(){
 		let username = $user_name.val();
 		let password = $user_password.val();
 		let super_password = $super_password.val();
-		let 
+		//let 
 
 		let connection_common = {
 			username : "" , 
@@ -60,16 +93,8 @@ $(function(){
 		auto_action.start();
 	}
 
-	$("#ui\\.addToListButton").bind("click" , function(){
-		alert("add to list");
-	})
-
 	$("#ui\\.importListData").bind("click" , function(){
-		alert("import list data");
-	})
-
-	$("#ui\\.deleteSelected").bind("click" , function(){
-		alert("delete selected");
+		$file_picker.trigger("click");
 	})
 
 	$("#ui\\.clearList").bind("click" , function(){

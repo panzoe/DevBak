@@ -17,6 +17,7 @@
 	<script type="text/javascript" src="extframeworks/sweet-alert/sweet-alert.min.js"></script>
 
 	<script type="text/javascript" src="controllers/factory.js"></script>
+	<script type="text/javascript" src="controllers/data.js"></script>
 	<script type="text/javascript" src="controllers/ui.js"></script>
 </head>
 	<body>
@@ -42,9 +43,11 @@
 						<option value="1">My Friends</option>
 						-->
 					</select>
+					<!--
 					<button id="ui.importListData" class="btn btn-lg btn-primary">
 						Import...
 					</button>
+					-->
 				</div>
 				<div class="col-xs-6">
 					<label for="user.en_password">Super Password:</label>
@@ -95,6 +98,10 @@
 					<textarea class="form-control" style="height:180px"></textarea>
 				</div>
 			</div>
+		</div>
+		<div style="display:none">
+			<input 	type="file" id="com.picker" 
+					accept=".xls,.xlsx,.xlsm,.xlsb,.ods,.xml,application/msexcel" />
 		</div>
 	</body>
 </html>

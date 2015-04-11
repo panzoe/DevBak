@@ -25,13 +25,13 @@ class AutoAction {
 			}
 		});
 
-		this.client.on("timeout" , (function(){
+		this.client.on("timeout" , function(){
 			if (this.autoaction.hooks.ontimeout) {
 				this.autoaction.hooks.ontimeout.apply(this);
 			}
 		});
 
-		this.client.on("close" , (function(){
+		this.client.on("close" , function(){
 			if (this.autoaction.hooks.onclose) {
 				this.autoaction.hooks.onclose.apply(this);
 			}
