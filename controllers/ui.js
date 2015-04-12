@@ -8,7 +8,6 @@ $(function(){
 	let $super_password = $("#user\\.super_password");
 	let $user_scripts = $("#ui\\.script_list");
 	let $user_tags = $("#ui\\.user_tags");
-	let $file_picker = $("#com\\.picker");
 
 	// wait app load from DevBak.scripts
 	let $$script_list = null;
@@ -26,51 +25,86 @@ $(function(){
 		option.appendChild(document.createTextNode(s));
 		frage.appendChild(option);
 	}
-	option.setAttribute("selected" , "selected");
+	//option.setAttribute("selected" , "selected");
 	$user_scripts.append(frage);
+
+	function autoAction() {
+		let user_name = $user_name.val();
+		let pass_word = $user_password.val();
+		let super_password = $super_password.val();
+		let user_script = $user_scripts.val();
+		let user_tags = $user_tags.val().split(",");
+
+		let connection_common = {
+			username : user_name , 
+			password : pass_word , 
+			superpassword : super_password , 
+			shellPrompt: "/ #" , 
+			timeout : 1500
+		};
+
+		if (! UserScript[user_script]) {
+			sweetAlert("Error: no script.");
+		};
+
+		user_script = [].concat(UserScript[user_script].actions);
+		let info = null;
+
+		// using user script to initial factory
+		let factory = new Factory({
+			script : user_script , 
+			options : connection_common
+		});
+
+		let callback = function() {
+			info = UserData[user_tags.shift()];
+
+			if (!info) {
+				sweetAlert("All task completed.");
+				return;
+			};
+
+			(factory.create({
+				host : info.IP , 
+				port : 23 , 
+				data : info
+			})).start(callback);
+		};
+
+		callback();
+	}
 
 	/**
 	* validate all of user inputs
 	* @returns {Boolean}
 	**/
 	function validate() {
-		return true;
-	}
-
-	function autoAction() {
-		let user_name = $user_name.val();
-		let pass_word = $user_password.val();
-		let super_password = $super_password.val();
-		//let 
-
-		let connection_common = {
-			username : user_name , 
-			password : password , 
-			shellPrompt: "/ #" , 
-			timeout : 1500
-		};
-
-		let connection_info = {
-			host : "127.0.0.1" , 
-			port : 3000
-		};
-
-		let task_callback = function() {
-			;
+		if (! $user_name.val()) {
+			sweetAlert("Error: username");
+			return false;
 		}
 
-		let user_script = [];
+		if (! $user_password.val()) {
+			sweetAlert("Error: password");
+			return false;
+		}
 
-		// using user script to initial factory
-		let factory = new Factory({
-			script : user_script , 
-			options : connection_common , 
-			callback: task_callback
-		});
+		if (! $super_password.val()) {
+			sweetAlert("Error: superpassword");
+			return false;
+		}
 
-		let auto_action = factory.create(connection_info);
+		if (! $user_scripts.val()) {
+			sweetAlert("Error: script");
+			return false;
+		}
 
-		auto_action.start();
+		if (! $user_tags.val()) {
+			sweetAlert("Error: sn");
+			return false;
+		}
+
+		return true;
 	}
 
 	$("#ui\\.clearList").bind("click" , function(){

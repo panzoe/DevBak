@@ -11,6 +11,7 @@ class AutoAction {
 		*/
 		this.script = param.script;
 		this.callback = param.callback;
+		this.data = param.data;
 
 		this.client = new telnet();
 
@@ -20,21 +21,38 @@ class AutoAction {
 		this.client.on("ready" , function(prompt){
 			let autoaction = this.autoaction;
 			let task = autoaction.script.shift();
-			if (hooks.onready) {
-				autoaction.hooks.onready.apply(this , [prompt]);
+
+			if (!task) {
+				autoaction.callback.apply(this , ["completed"]);
+			}
+			else {
+				if (task.expect && prompt.search(task.expect) == -1) {
+					autoaction.callback.apply(this , ["notexpect"]);
+				}
+				else {
+					this.exec(task.command , function(response){
+						;
+					});
+				}
 			}
 		});
 
 		this.client.on("timeout" , function(){
-			if (this.autoaction.hooks.ontimeout) {
-				this.autoaction.hooks.ontimeout.apply(this);
-			}
+			let autoaction = this.autoaction;
+			if (autoaction.hooks.ontimeout) {
+				autoaction.hooks.ontimeout.apply(this);
+			};
+
+			autoaction.callback.apply(this , ["timeout"])
 		});
 
 		this.client.on("close" , function(){
-			if (this.autoaction.hooks.onclose) {
-				this.autoaction.hooks.onclose.apply(this);
-			}
+			let autoaction = this.autoaction;
+			if (autoaction.hooks.onclose) {
+				autoaction.hooks.onclose.apply(this);
+			};
+
+			autoaction.callback.apply(this , ["close"]);
 		});
 	};
 
@@ -69,8 +87,9 @@ class Factory {
 		}		
 
 		return new AutoAction({
-			script : this.script , 
+			script : [].concat(this.script) , 
 			options : full_options , 
+			data : options.data , 
 			callback : callback
 		});
 	};
