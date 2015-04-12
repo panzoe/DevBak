@@ -29,26 +29,6 @@ $(function(){
 	option.setAttribute("selected" , "selected");
 	$user_scripts.append(frage);
 
-	// bind data import event
-	$file_picker.change(function(evt){
-		let files = evt.target.files;
-		if (files.length) {
-			let file = files[0];
-			let reader = new FileReader();
-
-			reader.onloaded = function(event) {
-				let workbook = XLSX.read(event.target.result , { type : "binary" });
-				let worksheet = workbook.Sheets[workbook.SheetNames[0]];
-				for(let z in worksheet) {
-					console.log(z)
-				}
-
-			};
-
-			reader.readAsBinaryString(file);
-		};
-	});
-
 	/**
 	* validate all of user inputs
 	* @returns {Boolean}
@@ -58,14 +38,14 @@ $(function(){
 	}
 
 	function autoAction() {
-		let username = $user_name.val();
-		let password = $user_password.val();
+		let user_name = $user_name.val();
+		let pass_word = $user_password.val();
 		let super_password = $super_password.val();
 		//let 
 
 		let connection_common = {
-			username : "" , 
-			password : "" , 
+			username : user_name , 
+			password : password , 
 			shellPrompt: "/ #" , 
 			timeout : 1500
 		};
@@ -92,10 +72,6 @@ $(function(){
 
 		auto_action.start();
 	}
-
-	$("#ui\\.importListData").bind("click" , function(){
-		$file_picker.trigger("click");
-	})
 
 	$("#ui\\.clearList").bind("click" , function(){
 		alert("clear list");

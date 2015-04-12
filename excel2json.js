@@ -12,6 +12,8 @@ json.push("[[]");
 
 var condition = true;
 var iteral = 1;
+
+// make excel to json format like : [[""],["SN","PORT","IP"],["D7AB21","30","192.168.1.1"]]
 while (condition) {
 	if (objExcel.Cells(iteral , 1)) {
 		json.push(',"');

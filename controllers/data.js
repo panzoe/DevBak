@@ -46,7 +46,17 @@ $(function(){
 
 	UserSettting.ColCount = +(UserSettting.ColCount);
 
-	// convert DevBak.da
+	/* convert DevBak.da
+	* eg.
+	* [[""],["SN","PORT","IP"],["D7AB21","30","192.168.1.1"]]
+	* to
+	* {
+	*	"7D001" : {
+	*		"port" : "1" , 
+	*		"ip" : "10.176.50.30"
+	*	}
+	* }
+	*/
 	if ("[object Array]" === Object.prototype.toString.apply(UserData)) {
 		if (UserData.length < 3) return;
 		UserData.shift();
@@ -62,15 +72,16 @@ $(function(){
 
 		let userData = {};
 		for (let idx = 0 ; idx < UserData.length ; idx++) {
-			let data = userData[UserData[keyCol]] = {};
+			let record = UserData[idx];
+			let data = userData[record[keyCol]] = {};
 
 			for (let jdx = 0 ; jdx < UserSettting.ColCount ; jdx++) {
-				data[keyCol[jdx]] = UserData[idx][jdx];
+				data[cols[jdx]] = record[jdx];
 			}
 		}
 
-		userData = JSON.stringify(userData);
+		//fs.writeFileSync("DevBak.da" , JSON.stringify(userData));
 
-		console.log(userData);
+		UserData = userData;
 	}
 });
