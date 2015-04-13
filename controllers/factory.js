@@ -18,21 +18,25 @@ class AutoAction {
 		// bind task information into orign telnet objects
 		this.autoaction = this;
 
-		this.client.on("ready" , function(prompt){
+		this.client.on("ready" , function dotask(prompt){
 			let autoaction = this.autoaction;
 			let task = autoaction.script.shift();
 
-			if (!task) {
-				autoaction.callback.apply(this , ["completed"]);
-			}
-			else {
-				if (task.expect && prompt.search(task.expect) == -1) {
-					autoaction.callback.apply(this , ["notexpect"]);
+			if (task) {
+				let expect = task.expect ? task.expect : autoaction.options.shellPrompt;
+				if (prompt.search(task.expect) != -1) {
+					this.exec(task.command , dotask);
 				}
 				else {
-					this.exec(task.command , function(response){
-						;
-					});
+					autoaction.callback.apply(this , ["notexpect"]);
+				}
+			}
+			else {
+				if (autoaction.script.length === 0) {
+					autoaction.callback.apply(this , ["completed"]);
+				}
+				else {
+					autoaction.callback.apply(this , ["scripterror"]);
 				}
 			}
 		});

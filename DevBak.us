@@ -1,4 +1,5 @@
 {
 	"KeyCol" : "SN" , 
-	"ColCount" : "3"
+	"ColCount" : "3" , 
+	"ShellPrompt" : "/ #"
 }

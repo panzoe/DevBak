@@ -2,6 +2,25 @@
 
 const ipAddressPattern = /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/;
 
+const logger = {
+	handler : null , 
+	cache : {
+		warnning : document.createElement("<span style='color:red'>");
+	} , 
+	info : function(msg) {
+		if (handler) {
+			handler.appendChild(document.createTextNode(msg));
+		}
+	} , 
+	error : function(msg) {
+		if (handler) {
+			let warn = this.cache.warnning.cloneNode();
+			warn.appendChild(document.createTextNode(msg));
+			handler.appendChild(warn);
+		}
+	}
+};
+
 $(function(){
 	let $user_name = $("#user\\.name");
 	let $user_password = $("#user\\.password");
@@ -12,6 +31,8 @@ $(function(){
 	// wait app load from DevBak.scripts
 	let $$script_list = null;
 	let $$import_data = null;
+
+	logger.handler = document.getElementById("ui.logger");
 
 	// enable select components
 	$("select").select2({dropdownCssClass: 'dropdown-inverse'});
@@ -39,7 +60,7 @@ $(function(){
 			username : user_name , 
 			password : pass_word , 
 			superpassword : super_password , 
-			shellPrompt: "/ #" , 
+			shellPrompt: UserData.ShellPrompt , 
 			timeout : 1500
 		};
 
@@ -57,11 +78,19 @@ $(function(){
 		});
 
 		let callback = function() {
-			info = UserData[user_tags.shift()];
+			let user_tag = user_tags.shift();
+			info = UserData[user_tag];
 
 			if (!info) {
-				sweetAlert("All task completed.");
-				return;
+				if (user_tags.length > 0) {
+					logger.error(user_tag + "'s record is not found.");
+					callback();
+					return;
+				}
+				else {
+					sweetAlert("All task completed.");
+					return;
+				}
 			};
 
 			(factory.create({
