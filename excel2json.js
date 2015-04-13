@@ -15,21 +15,25 @@ var iteral = 1;
 
 // make excel to json format like : [[""],["SN","PORT","IP"],["D7AB21","30","192.168.1.1"]]
 while (condition) {
-	if (objExcel.Cells(iteral , 1)) {
-		json.push(',"');
+	if ((objExcel.Cells(iteral , 1) + "") != "undefined") {
+		json.push(',["');
 		json.push(objExcel.Cells(iteral , 1));
 		json.push('","');
 		json.push(objExcel.Cells(iteral , 2));
 		json.push('","');
 		json.push(objExcel.Cells(iteral , 3));
-		json.push('"');
+		json.push('"]');
 
 		WScript.Echo(objExcel.Cells(iteral , 1) + " converted.");
+
+		iteral++;
 
 		continue;
 	}
 	break;
 }
+
+json.push("]")
 
 WScript.Echo("writing into da file.")
 
