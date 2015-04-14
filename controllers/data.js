@@ -80,7 +80,7 @@ $(function(){
 			}
 		}
 
-		//fs.writeFileSync("DevBak.da" , JSON.stringify(userData));
+		fs.writeFileSync("DevBak.da" , JSON.stringify(userData));
 
 		UserData = userData;
 	}

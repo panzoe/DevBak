@@ -1,6 +1,7 @@
 "use strict";
 
 const telnet = require("telnet-client");
+const format = require("string-template")
 
 class AutoAction {
 	constructor(param) {
@@ -11,6 +12,7 @@ class AutoAction {
 		*/
 		this.script = param.script;
 		this.callback = param.callback;
+		// user data record eg. SN,IP,PORT
 		this.data = param.data;
 
 		this.client = new telnet();
@@ -25,6 +27,11 @@ class AutoAction {
 			if (task) {
 				let expect = task.expect ? task.expect : autoaction.options.shellPrompt;
 				if (prompt.search(task.expect) != -1) {
+					let command = task.command;
+					command = command.replace(/\$\{VARS_/g,"{var");
+					command = format(command , autoaction.data);
+					command = command.replace(/\$\{IMPORTS_/g,"{imp");
+					command = format(command , autoaction.data);
 					this.exec(task.command , dotask);
 				}
 				else {
@@ -78,10 +85,22 @@ class Factory {
 	};
 
 	create(options) {
+		let record = options.data;
+		let user_data = {};
+		delete options.data;
+
+		for (let name in record) {
+			user_data["imp" + name.toUpperCase()] = record[name];
+		};
+
 		let full_options = Object.create(this.pre_options);
 
 		for (let i in options) {
 			full_options[i] = options[i];
+		}
+
+		for (let name in full_options) {
+			user_data["var" + name.toUpperCase()] = full_options[name];
 		}
 
 		let callback = function(){};
@@ -93,7 +112,7 @@ class Factory {
 		return new AutoAction({
 			script : [].concat(this.script) , 
 			options : full_options , 
-			data : options.data , 
+			data : user_data , 
 			callback : callback
 		});
 	};

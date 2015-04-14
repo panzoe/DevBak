@@ -1,5 +1,6 @@
 {
 	"KeyCol" : "SN" , 
 	"ColCount" : "3" , 
-	"ShellPrompt" : "/ #"
+	"ShellPrompt" : "/ #" , 
+	"Timeout" : "1500"
 }

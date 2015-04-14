@@ -1,4 +1,18 @@
 {
+	"test suse telnet" : {
+		"actions" : [
+			{
+				"command" : "ls"
+			} , 
+			{
+				"command" : "whoami"
+			} , 
+			{
+				"command" : "echo $PATH"
+			}
+		]
+	} , 
+
 	"up port" : {
 		"actions" : [
 			{
@@ -46,7 +60,7 @@
 				"command" : "conf t"
 			} ,
 			{
-				"command" : "int fa 0/${VARS_PORT}"
+				"command" : "int fa 0/${IMPORTS_PORT}"
 			} ,
 			{
 				"command" : "no switchport port-security mac-address sticky"
