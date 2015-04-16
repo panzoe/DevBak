@@ -44,6 +44,7 @@ $(function(){
 	UserData = loadConfiguration("DevBak.da");
 	UserSettting = loadConfiguration("DevBak.us");
 
+	// convert number type
 	UserSettting.ColCount = +(UserSettting.ColCount);
 
 	/* convert DevBak.da
@@ -73,10 +74,10 @@ $(function(){
 		let userData = {};
 		for (let idx = 0 ; idx < UserData.length ; idx++) {
 			let record = UserData[idx];
-			let data = userData[record[keyCol]] = {};
+			let data = userData[String(record[keyCol]).toUpperCase()] = {};
 
 			for (let jdx = 0 ; jdx < UserSettting.ColCount ; jdx++) {
-				data[cols[jdx]] = record[jdx];
+				data[String(cols[jdx]).toUpperCase()] = record[jdx];
 			}
 		}
 

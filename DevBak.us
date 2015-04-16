@@ -2,5 +2,5 @@
 	"KeyCol" : "SN" , 
 	"ColCount" : "3" , 
 	"ShellPrompt" : "/ #" , 
-	"Timeout" : "1500"
+	"Timeout" : "300"
 }

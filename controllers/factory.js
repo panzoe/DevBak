@@ -12,15 +12,35 @@ class AutoAction {
 		*/
 		this.script = param.script;
 		this.callback = param.callback;
+
 		// user data record eg. SN,IP,PORT
-		this.data = param.data;
+		this.data = {};
+		for (let tdx in param.data) {
+			this.data["var" + tdx.toUpperCase()] = param.data[tdx];
+		}
+
+		this.vars = {};
+		for (let jdx in this.options) {
+			this.vars["imp" + jdx.toUpperCase()] = this.options[jdx];
+		}
 
 		this.client = new telnet();
 
 		// bind task information into orign telnet objects
-		this.autoaction = this;
+		this.client.autoaction = this;
+
+		let __callback_or_log_it = function(param) {
+			if (param.callback) {
+				param.callback.apply(param.owner , param.parameters);
+			}
+			else {
+				param.logger.apply(logger , param.info);
+			}
+		};
 
 		this.client.on("ready" , function dotask(prompt){
+			logger.log(prompt);
+
 			let autoaction = this.autoaction;
 			let task = autoaction.script.shift();
 
@@ -29,21 +49,42 @@ class AutoAction {
 				if (prompt.search(task.expect) != -1) {
 					let command = task.command;
 					command = command.replace(/\$\{VARS_/g,"{var");
-					command = format(command , autoaction.data);
+					command = format(command , autoaction.vars);
 					command = command.replace(/\$\{IMPORTS_/g,"{imp");
 					command = format(command , autoaction.data);
-					this.exec(task.command , dotask);
+					
+					logger.log(task.command);
+
+					this.exec(command , dotask);
 				}
 				else {
-					autoaction.callback.apply(this , ["notexpect"]);
+					__callback_or_log_it({
+						owner : this , 
+						callback : autoaction.callback , 
+						parameters : ["notexpect"] , 
+						logger : logger.info , 
+						info : ["telnet server return a not expect shell prompt."]
+					});
 				}
 			}
 			else {
 				if (autoaction.script.length === 0) {
-					autoaction.callback.apply(this , ["completed"]);
+					__callback_or_log_it({
+						owner : this , 
+						callback : autoaction.callback , 
+						parameters : ["completed"] , 
+						logger : logger.error , 
+						info : ["task completed."]
+					});
 				}
 				else {
-					autoaction.callback.apply(this , ["scripterror"]);
+					__callback_or_log_it({
+						owner : this , 
+						callback : autoaction.callback , 
+						parameters : ["scripterror"] , 
+						logger : logger.warn , 
+						info : ["user script's format may be in wrong way."]
+					});
 				}
 			}
 		});
@@ -54,7 +95,13 @@ class AutoAction {
 				autoaction.hooks.ontimeout.apply(this);
 			};
 
-			autoaction.callback.apply(this , ["timeout"])
+			__callback_or_log_it({
+				owner : this , 
+				callback : autoaction.callback , 
+				parameters : ["timeout"] , 
+				logger : logger.info , 
+				info : ["a telnet connection timeout."]
+			});
 		});
 
 		this.client.on("close" , function(){
@@ -63,7 +110,13 @@ class AutoAction {
 				autoaction.hooks.onclose.apply(this);
 			};
 
-			autoaction.callback.apply(this , ["close"]);
+			__callback_or_log_it({
+				owner : this , 
+				callback : autoaction.callback , 
+				parameters : ["close"] , 
+				logger : logger.info , 
+				info : ["a telnet connection closed."]
+			});
 		});
 	};
 

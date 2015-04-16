@@ -7,25 +7,57 @@ const logger = {
 	handler : null , 
 	report : [] , 
 	template : {
-		warnning : (function(){
-			let element = document.createElement("span");
+		warn : (function(){
+			let element = document.createElement("font");
+				element.style.color = "yellow";
+			return element;
+		})() , 
+		info : (function(){
+			let element = document.createElement("font");
+				element.style.color = "green";
+			return element;
+		})() , 
+		error : (function(){
+			let element = document.createElement("font");
 				element.style.color = "red";
 			return element;
+		})() , 
+		log : (function(){
+			let element = document.createElement("font");
+				element.style.color = "black";
+			return element;
+		})() , 
+		br : (function(){
+			return document.createElement("br");
 		})()
 	} , 
-	info : function(msg) {
-		if (handler) {
-			handler.appendChild(document.createTextNode(msg));
-			return msg;
+	_common : function(type , msg) {
+		if (this.handler) {
+			// let wrapper = this.template[type].cloneNode();
+			// wrapper.appendChild(document.createTextNode(msg + "\r\n"));
+			// this.handler.appendChild(wrapper);
+			this.handler.appendChild(document.createTextNode(msg + "\r\n"));
 		}
+		return msg;
+	} , 
+	reset : function() {
+		this.handler.innerHTML = "";
+	} , 
+	warn : function(msg) {
+		console.warn(msg);
+		return this._common("warn" , msg);
+	} ,
+	info : function(msg) {
+		console.info(msg)
+		return this._common("info" , msg);
 	} , 
 	error : function(msg) {
-		if (handler) {
-			let warn = this.template.warnning.cloneNode();
-			warn.appendChild(document.createTextNode(msg));
-			handler.appendChild(warn);
-			return msg;
-		}
+		console.error(msg);
+		return this._common("error" , msg);
+	} , 
+	log : function(msg) {
+		console.log(msg);
+		return this._common("log" , msg);
 	}
 };
 
@@ -78,8 +110,8 @@ $(function(){
 			username : user_name , 
 			password : pass_word , 
 			superpassword : super_password , 
-			shellPrompt: UserData.ShellPrompt , 
-			timeout : +(UserData.Timeout)
+			shellPrompt: UserSettting.ShellPrompt , 
+			timeout : +(UserSettting.Timeout)
 		};
 
 		// check selected user script exist
@@ -96,15 +128,47 @@ $(function(){
 			options : connection_common
 		});
 
-		let callback = function __callback() {
-			let user_tag = user_tags.shift();
+		logger.reset();
+		logger.info("starting auto actions...");
+		logger.info("time out set to :[" + UserSettting.Timeout + "]");
+
+		let user_tag = "";
+		let callback = function __callback(actionCompletedStatus) {
+			if (actionCompletedStatus) {
+				logger.info("action [" + user_tag + "] finished with status:" + actionCompletedStatus);
+
+				if (actionCompletedStatus === "timeout") {
+					;
+				}
+				else if (actionCompletedStatus === "close") {
+					;
+				}
+				else if (actionCompletedStatus === "notfound") {
+					logger.info("skip action:[" + user_tag + "],try another one.");
+				}
+			};
+
+			let before_shift = user_tags.length;
+			user_tag = user_tags.shift();
 			info = UserData[user_tag];
 
+			if (user_tag) {
+				logger.log("start action :[" + user_tag + "]...");
+			}
+
+			// 
 			if (!info) {
-				if (user_tags.length > 0) {
-					logger.error(user_tag + "'s record is not found.");
-					__callback();
-					return;
+				if (before_shift > 0) {
+					logger.error("[" + user_tag + "]'s record is not found!!!");
+					
+					if (before_shift === 1) {
+						logger.info("All task completed.").sweetAlert();
+						return;
+					}
+					else {
+						__callback.apply(this , ["notfound"]);
+						return;
+					}
 				}
 				else {
 					logger.info("All task completed.").sweetAlert();
