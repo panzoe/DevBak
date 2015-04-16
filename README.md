@@ -23,11 +23,11 @@ develop base on nw.js project
 连接数据表用于保存远程计算机的连接信息，数据来源的 Excel 文件要求至少包含两列:计算机标识名，计算机地址
 Excel 第一行必须为该列的字段标识名（要求纯英文字母或数字的结合），形如：
 
-| Compute |      Ip      |   Owner  |
-|-----------------------------------|
+| Compute |   IpAddress  |   Owner  |
+|---------|--------------|----------|
 | DNF3C1T | 192.168.1.10 |   John   |
-| DNF3C1T | 199.199.1.11 |   Jack   |
-| DNF3C1T | 172.100.1.12 |   Ewan   |
+| DNF3C2T | 199.199.1.11 |   Jack   |
+| DNF3C3T | 172.100.1.12 |   Ewan   |
 
 将 Excel 文件保存为 da.xlsx 并与 excel2json.bat , excel2json.js 放在同一目录下，
 确保当前操作系统安装了 Microsoft Office 2007 以上的办公软件，双击 excel2json.bat 静待转换工作完成，
